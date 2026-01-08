@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Auto Submit</title>
+</head>
+<body>
+  <h2>Watch Video & Auto Submit Details</h2>
+
+  <video id="myVideo" width="600" controls>
+    <source src="your-video.mp4" type="video/mp4">
+  </video>
+
+  <script>
+    document.getElementById("myVideo").addEventListener("play", function() {
+        fetchUserData();
+    });
+
+    function fetchUserData() {
+        const email = "ravi@example.com"; // or get dynamically
+        const url = `https://script.google.com/macros/s/YOUR_FETCH_WEB_APP_ID/exec?email=${email}`;
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+              console.log("User Data:", data);
+              autoSubmitToSheet(data);
+          });
+    }
+
+    function autoSubmitToSheet(userData) {
+        const sheetURL = "https://script.google.com/macros/s/YOUR_SAVE_WEB_APP_ID/exec";
+
+        fetch(sheetURL, {
+            method: "POST",
+            body: JSON.stringify(userData),
+            headers: { "Content-Type": "application/json" }
+        })
+        .then(res => res.text())
+        .then(res => console.log(res));
+    }
+  </script>
+</body>
+</html>
